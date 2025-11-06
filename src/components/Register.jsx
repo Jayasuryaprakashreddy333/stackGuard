@@ -276,7 +276,7 @@ const Register = ()=>{
         {/* Sign in */}
         <p className="text-sm text-center mt-3 font-[Poppins]">
           Already have an account?{" "}
-         <a href="/login" className="underline text-black font-medium">
+         <a href="https://stack-guard-nu.vercel.app/login" className="underline text-black font-medium">
             Sign in
           </a>
         </p>
