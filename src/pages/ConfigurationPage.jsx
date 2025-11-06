@@ -5,8 +5,11 @@ import Configuartion from '../components/Config'
 
 
 const ConfigurationPage = () => {
-   
-
+   const verify = localStorage.getItem('isVerified');
+   //if user navigate dashboard --> auth page then it check isverified is present it removes from local storage user have to enter again publickey before navigate to dashboard
+   if(verify){
+    localStorage.removeItem('isVerified');
+   }
   const handleAnimationComplete = () => {
     console.log('All letters have animated!')
   }

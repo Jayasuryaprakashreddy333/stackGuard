@@ -1,24 +1,27 @@
+import { useNavigate } from 'react-router-dom';
 import {useState} from 'react'
 
 const Configuartion = ()=>{
      const [publicKey, setPublicKey] = useState("");
-  const [isVerified, setIsVerified] = useState(false);
+  const [isVerified, setIsVerified] = useState(null);
+  const navigate = useNavigate()
 
   const handleVerify = () => {
     const savedKey = localStorage.getItem("publicKey");
-
+    //checks  publickey stored in local storage and user entered key is matching or not
     if (savedKey && publicKey === savedKey) {
       setIsVerified(true);
-      alert("Public key verified successfully!");
-    } else {
-      alert("Invalid public key. Please try again.");
+      localStorage.setItem('isVerified',JSON.stringify(isVerified))
+      navigate('/dashboard')
+      
     }
+    setIsVerified(false)
   };
   return(
        
     <div className="flex justify-center items-center h-screen bg-[#ffffff]">
       <div className="bg-white w-[400px] p-8 rounded-2xl  flex flex-col items-center">
-        {/* Logo */}
+    
         <div className="flex items-center gap-2 mb-6">
           <svg
             width="25"
@@ -37,7 +40,7 @@ const Configuartion = ()=>{
           <h1 className="text-2xl font-semibold text-black">Stackguard</h1>
         </div>
 
-        {/* Title */}
+    
         <h2 className="text-xl font-semibold mb-2 text-center">
           Verify your public key
         </h2>
@@ -45,7 +48,7 @@ const Configuartion = ()=>{
           To get started, provide your public key for verification
         </p>
 
-        {/* Input */}
+      
         <input
           type="text"
           value={publicKey}
@@ -54,7 +57,7 @@ const Configuartion = ()=>{
           className="w-full p-3 bg-gray-100 rounded-md text-sm outline-none mb-4 focus:ring-2 focus:ring-purple-700"
         />
 
-        {/* Button */}
+        
         <button
           onClick={handleVerify}
           className="w-full bg-[#44087D] hover:bg-[#5a0ab0] text-white py-2 rounded-md transition-all"
@@ -62,7 +65,8 @@ const Configuartion = ()=>{
           Verify
         </button>
 
-        {/* Footer */}
+       {/*error text*/}
+       {isVerified!==null?<p>Incorrect public key!</p>:''}
         <p className="text-xs text-gray-500 mt-6 text-center">
           Don’t have a public key?{" "}
           <span className="text-purple-700 cursor-pointer hover:underline">

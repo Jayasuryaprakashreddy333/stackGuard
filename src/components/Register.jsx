@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react"
 import {v4 as uuidv4} from 'uuid'
@@ -29,24 +29,31 @@ const Register = ()=>{
     { label: "Contains a number", valid: /[0-9]/.test(userObj.password) },
     { label: "Contains special character", valid: /[!@#$%^&*]/.test(userObj.password) },
   ];
+   const navigate = useNavigate()
 
    
     const onRegister = (event)=>{
+      console.log(event)
         event.preventDefault()
         const users = JSON.parse(localStorage.getItem('users'))||[] 
+        //checks if user already exists in local storage
         const isUserExists = users.find(val=>(
           val.firstname===userObj.firstname&&val.lastname===userObj.lastname,val.emailId===userObj.emailId&&val.password===userObj.password
         ))
+        console.log(isUserExists)
         if(!isUserExists){
-           users.push(userObj) 
+          //if user is new then newuser pushed into users list
+           users.push({...userObj}) 
            localStorage.setItem('users',JSON.stringify(users))
-           const publicKey = uuidv4() 
-           setUserKey(publicKey) 
+           const publicKey = uuidv4() // After push the user assign with publickey
            localStorage.setItem('publickey',JSON.stringify(publicKey))
-           const navigate = useNavigate()
+           setUserKey(publicKey) 
            setTimeout(()=>(
             navigate('/auth')
-           ),4000)
+           ),8000) // after 8 seconds user redirect into configuaration page
+        }
+        else{
+          setUserKey('')
         }
         setUserObj(
             {
@@ -57,7 +64,15 @@ const Register = ()=>{
                 confirmpass:''
             }
         )
+        setActive({
+        isNameFill:null,
+        isLastNameFill:null,
+        isEmailIdFill:null,
+        isPassFill:null,
+        isConfirmFill:null,
+        })
     }
+    console.log(userKey)
     return(
         <div className="min-h-screen flex items-center justify-center bg-white mt-4 mb-4">
       <div className="w-[450px] flex flex-col items-center px-6 py-8  rounded-lg">
@@ -91,7 +106,7 @@ const Register = ()=>{
           practices.
         </p>
 
-        {/* Form */}{userKey!==''?(
+        {/*At first it shows form after create account it show publickey to user */}{userKey===''||userKey===null?(
         <form onSubmit={onRegister} className="w-full space-y-4">
           <div className="flex space-x-3">
             <div className="flex flex-col">
@@ -226,7 +241,7 @@ const Register = ()=>{
             {onActive.isConfirmFill===false?<p className="text-red-800 text-sm font-[Poppins] pt-[0px]">*Required</p>:''}
           <button
             type="submit"
-            className={`h-[45px] w-full text-white rounded-md text-sm cursor-pointer ${userObj.firstname!==''&&userObj.lastname!==''&&userObj.emailid!==''&&userObj.password!==''&&userObj.confirmpass!==''?'bg-[#44087D] hover:bg-[#360665]':'bg-[#454545] hover:bg-[#333]'}`}
+            className={`h-[45px] w-full text-white rounded-md text-sm cursor-pointer ${userObj.firstname!==''&&userObj.lastname!==''&&userObj.emailId!==''&&userObj.password!==''&&userObj.confirmpass!==''?'bg-[#44087D] hover:bg-[#360665]':'bg-[#454545] hover:bg-[#333]'}`}
           >
             Create account
           </button>
@@ -234,7 +249,7 @@ const Register = ()=>{
           {userKey===''?<p className='text-red-800 text-sm font-[Poppins]'>User already exists</p>:''}
         </form>):(
         <div className="text-center bg-white shadow-xl rounded-2xl p-8 w-[400px]">
-          <h2 className="text-xl font-bold mb-2">🎉 Registration Successful!</h2>
+          <h2 className="text-xl font-bold mb-2">Registration Successful!</h2> 
           <p className="text-gray-600 mb-2">Your Public Key:</p>
           <p className="font-mono bg-gray-100 p-3 rounded text-sm break-all">
             {userKey}
@@ -261,7 +276,7 @@ const Register = ()=>{
         {/* Sign in */}
         <p className="text-sm text-center mt-3 font-[Poppins]">
           Already have an account?{" "}
-          <a href="#" className="underline text-black font-medium">
+         <a href="/login" className="underline text-black font-medium">
             Sign in
           </a>
         </p>

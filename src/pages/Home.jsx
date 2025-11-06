@@ -4,6 +4,15 @@ import LetterGlitch from '../components/LetterGlitch'
 
 
 const Home = () => {
+    //if user navigate to any protectroute page to home then it removes users tokens user need to again enter credentails
+    const keyValue = localStorage.getItem('publickey');
+  const verify = localStorage.getItem('isVerified');
+  if(keyValue){
+    localStorage.removeItem('publickey')
+  }
+  if(verify){
+    localStorage.removeItem('isVerified')
+  }
   const handleAnimationComplete = () => {
     console.log('All letters have animated!')
   }

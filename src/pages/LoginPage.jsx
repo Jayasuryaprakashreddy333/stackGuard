@@ -3,6 +3,15 @@ import LetterGlitch from '../components/LetterGlitch'
 import Login from '../components/Login'
 
 const LoginPage = () => {
+    //if user navigate from protectedroute's to public route it removes user's security tokens and user need to again enter credentails before navigate to protectedroute's
+    const keyValue = localStorage.getItem('publickey');
+  const verify = localStorage.getItem('isVerified');
+  if(keyValue){
+    localStorage.removeItem('publickey')
+  }
+  if(verify){
+    localStorage.removeItem('isVerified')
+  }
   const handleAnimationComplete = () => {
     console.log('All letters have animated!')
   }

@@ -8,18 +8,22 @@ const Login = ()=>{
     const[loggedData,setLoggedData] = useState({emailId:'',password:''})
     const[showPass ,setShowPass] = useState(false)
     const[keysaved, setKey] = useState(null)
+    const navigate = useNavigate()
     const onLogin = (event)=>{
         event.preventDefault();
         const users = JSON.parse(localStorage.getItem('users')) || []
+        //checks user entered credentails vaid or not
         const isValidUser = users.find(val=>val.emailId===loggedData.emailId&&val.password===loggedData.password)
-        setKey(uuidv4());
         if(isValidUser){
-            localStorage.setItem('publickey',JSON.stringify(keysaved))
+            setKey(uuidv4());
+            localStorage.setItem('publickey',JSON.stringify(keysaved)) // assign public key to user
             setTimeout(()=>(
-                useNavigate('/auth')
-            ),4000)
+                navigate('/auth')
+            ),8000) //after 8 second it automatically redirect to configuaration page
         }
-        setKey('')
+        else{
+            setKey('')
+        }
         setLoggedData({
             emailId:'',
             password:''
@@ -52,7 +56,7 @@ const Login = ()=>{
     <p className="text-center text-gray-600 text-sm font-[Poppins] mb-6">
       Secure your codebase with advanced secret scanning security best practices.
     </p>
-    {keysaved!==''&&keysaved!==null?(
+    {keysaved===''||keysaved===null?(
     <form onSubmit={onLogin} className="w-full space-y-4">
       <input
         type="email"
@@ -91,7 +95,7 @@ const Login = ()=>{
       {keysaved===''?<p className='text-sm font-[Poppins] text-red-800'>Invalid credentails</p>:''}
     </form>):(
         <div className="text-center bg-white shadow-xl rounded-2xl p-8 w-[400px]">
-          <h2 className="text-xl font-bold mb-2">🎉 Registration Successful!</h2>
+          <h2 className="text-xl font-bold mb-2"> Login Successful!</h2>
           <p className="text-gray-600 mb-2">Your Public Key:</p>
           <p className="font-mono bg-gray-100 p-3 rounded text-sm break-all">
             {keysaved}
